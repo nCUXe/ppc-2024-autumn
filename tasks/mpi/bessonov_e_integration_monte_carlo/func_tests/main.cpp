@@ -13,7 +13,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, PositiveRangeTestMPI) {
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   double a = 0.0;
   double b = 1.0;
-  int num_points = 100000000;
+  int num_points = 1000000;
   if (world.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
@@ -48,7 +48,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, NegativeRangeTestMPI) {
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   double a = -1.0;
   double b = 0.0;
-  int num_points = 100000000;
+  int num_points = 1000000;
   if (world.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
@@ -83,7 +83,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, LongRangeTestMPI) {
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   double a = -10.0;
   double b = 15.0;
-  int num_points = 100000000;
+  int num_points = 1000000;
   if (world.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
