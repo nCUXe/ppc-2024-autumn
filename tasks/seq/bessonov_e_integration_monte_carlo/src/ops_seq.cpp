@@ -1,8 +1,9 @@
 #pragma once
 
+#include "seq/bessonov_e_integration_monte_carlo/include/ops_seq.hpp"
+
 #include <thread>
 
-#include "seq/bessonov_e_integration_monte_carlo/include/ops_seq.hpp"
 using namespace std::chrono_literals;
 
 bool bessonov_e_integration_monte_carlo_seq::TestTaskSequential::validation() {
