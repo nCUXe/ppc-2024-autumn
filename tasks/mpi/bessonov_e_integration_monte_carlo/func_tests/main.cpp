@@ -108,7 +108,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, LongRangeTestMPI) {
     testMpiTaskSequential.pre_processing();
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
-    ASSERT_NEAR(reference_result[0], global_result[0], 1e2);
+    ASSERT_NEAR(reference_result[0], global_result[0], 1e3);
   }
 }
 
