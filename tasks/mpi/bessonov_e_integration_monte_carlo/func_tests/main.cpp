@@ -118,7 +118,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, EqualRangeTestMPI) {
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   double a = -5.0;
   double b = 5.0;
-  int num_points = 10000000;
+  int num_points = 100000000;
   if (world.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
