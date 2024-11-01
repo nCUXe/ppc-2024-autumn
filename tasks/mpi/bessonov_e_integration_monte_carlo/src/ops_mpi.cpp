@@ -75,10 +75,8 @@ bool bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel::run() {
   std::mt19937 gen(rd());
   std::uniform_real_distribution<> dis(a, b);
 
-  int num_points_for_process = num_points / world.size();
-  if (world.rank() < num_points % world.size()) {
-    num_points_for_process++;
-  }
+  int remainder = num_points % world.size();
+  int num_points_for_process = num_points / world.size() + (world.rank() < remainder ? 1 : 0);
 
   double sum = 0.0;
   for (int i = 0; i < num_points_for_process; ++i) {
