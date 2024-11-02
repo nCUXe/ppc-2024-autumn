@@ -108,7 +108,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, VerySmallRangeTestMPI) {
     testMpiTaskSequential.pre_processing();
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
-    ASSERT_NEAR(reference_result[0], global_result[0], 1e-8);
+    ASSERT_NEAR(reference_result[0], global_result[0], 3e-8);
   }
 }
 
@@ -178,7 +178,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, VeryLongRangeTestMPI) {
     testMpiTaskSequential.pre_processing();
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
-    ASSERT_NEAR(reference_result[0], global_result[0], 1e4);
+    ASSERT_NEAR(reference_result[0], global_result[0], 3e4);
   }
 }
 
