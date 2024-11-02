@@ -4,11 +4,11 @@
 
 #include <boost/mpi/collectives.hpp>
 #include <boost/mpi/communicator.hpp>
+#include <functional>
 #include <memory>
+#include <random>
 #include <utility>
 #include <vector>
-#include <functional>
-#include <random>
 
 #include "core/task/include/task.hpp"
 

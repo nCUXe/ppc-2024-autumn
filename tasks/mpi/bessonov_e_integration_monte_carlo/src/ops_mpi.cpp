@@ -1,6 +1,5 @@
 #include "mpi/bessonov_e_integration_monte_carlo/include/ops_mpi.hpp"
 
-
 bool bessonov_e_integration_monte_carlo_mpi::TestMPITaskSequential::validation() {
   internal_order_test();
   return (taskData->inputs.size() == 3 && taskData->outputs.size() == 1);
