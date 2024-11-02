@@ -1,6 +1,5 @@
 #include "seq/bessonov_e_integration_monte_carlo/include/ops_seq.hpp"
 
-
 bool bessonov_e_integration_monte_carlo_seq::TestTaskSequential::validation() {
   internal_order_test();
   return (taskData->inputs.size() == 3 && taskData->outputs.size() == 1);
