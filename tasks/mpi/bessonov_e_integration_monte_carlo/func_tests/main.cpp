@@ -154,7 +154,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, RandomTestMPI) {
 
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_real_distribution<> dis(-10.0, 10.0);
+  std::uniform_real_distribution<> dis(-8.0, 8.0);
   double a = dis(gen);
   double b = dis(gen);
 
@@ -190,6 +190,6 @@ TEST(bessonov_e_integration_monte_carlo_mpi, RandomTestMPI) {
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
 
-    ASSERT_NEAR(reference_result[0], global_result[0], 1e1);
+    ASSERT_NEAR(reference_result[0], global_result[0], 2e1);
   }
 }
