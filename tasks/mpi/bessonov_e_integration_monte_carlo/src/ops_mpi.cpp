@@ -1,11 +1,5 @@
 #include "mpi/bessonov_e_integration_monte_carlo/include/ops_mpi.hpp"
 
-#include <algorithm>
-#include <functional>
-#include <random>
-#include <string>
-#include <thread>
-#include <vector>
 
 bool bessonov_e_integration_monte_carlo_mpi::TestMPITaskSequential::validation() {
   internal_order_test();
