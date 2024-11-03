@@ -56,14 +56,16 @@ bool bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel::pre_processing
     num_points = *reinterpret_cast<int*>(taskData->inputs[2]);
   }
 
-  boost::mpi::broadcast(world, a, 0);
-  boost::mpi::broadcast(world, b, 0);
-  boost::mpi::broadcast(world, num_points, 0);
   return true;
 }
 
 bool bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel::run() {
   internal_order_test();
+
+  boost::mpi::broadcast(world, a, 0);
+  boost::mpi::broadcast(world, b, 0);
+  boost::mpi::broadcast(world, num_points, 0);
+
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<> dis(a, b);
