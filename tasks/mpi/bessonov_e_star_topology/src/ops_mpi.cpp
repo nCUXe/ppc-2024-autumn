@@ -22,7 +22,7 @@ bool bessonov_e_star_topology_mpi::TestMPITaskParallel::validation() {
   }
 
   if (world.rank() == 0) {
-    return (taskData->inputs_count.size() >= 1) && (taskData->inputs_count[0] > 0) && (!taskData->inputs.empty()) &&
+    return (!taskData->inputs_count.empty()) && (taskData->inputs_count[0] > 0) && (!taskData->inputs.empty()) &&
            (taskData->inputs[0] != nullptr);
   }
 
