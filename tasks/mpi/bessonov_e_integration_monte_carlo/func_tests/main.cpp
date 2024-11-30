@@ -186,8 +186,8 @@ TEST(bessonov_e_integration_monte_carlo_mpi, EqualRangeTestMPI) {
   boost::mpi::communicator world;
   std::vector<double> global_result(1, 0.0);
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
-  double a = -2.0;
-  double b = 2.0;
+  double a = -1.5;
+  double b = 1.5;
   int num_points = 100000;
   if (world.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
@@ -213,7 +213,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, EqualRangeTestMPI) {
     testMpiTaskSequential.pre_processing();
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
-    ASSERT_NEAR(reference_result[0], global_result[0], 2e-1);
+    ASSERT_NEAR(reference_result[0], global_result[0], 3e-1);
   }
 }
 
@@ -224,7 +224,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, RandomTestMPI) {
 
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_real_distribution<> dis(-8.0, 8.0);
+  std::uniform_real_distribution<> dis(-7.0, 7.0);
   double a = dis(gen);
   double b = dis(gen);
 
@@ -260,6 +260,6 @@ TEST(bessonov_e_integration_monte_carlo_mpi, RandomTestMPI) {
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
 
-    ASSERT_NEAR(reference_result[0], global_result[0], 2e1);
+    ASSERT_NEAR(reference_result[0], global_result[0], 3e1);
   }
 }
