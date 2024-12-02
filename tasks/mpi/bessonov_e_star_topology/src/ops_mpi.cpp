@@ -17,10 +17,6 @@ bool bessonov_e_star_topology_mpi::TestMPITaskParallel::pre_processing() {
 bool bessonov_e_star_topology_mpi::TestMPITaskParallel::validation() {
   internal_order_test();
 
-  if (world.size() < 2) {
-    return false;
-  }
-
   if (world.rank() == 0) {
     return (!taskData->inputs_count.empty()) && (taskData->inputs_count[0] > 0) && (!taskData->inputs.empty()) &&
            (taskData->inputs[0] != nullptr);

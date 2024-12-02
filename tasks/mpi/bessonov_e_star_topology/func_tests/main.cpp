@@ -9,6 +9,12 @@
 
 TEST(bessonov_e_star_topology_mpi, DataTransmissionTest) {
   boost::mpi::communicator world;
+
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
   const int data_size = 5;
@@ -34,10 +40,7 @@ TEST(bessonov_e_star_topology_mpi, DataTransmissionTest) {
   }
 
   bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
-  bool is_valid = testMpiTaskParallel.validation();
-  if (!is_valid) {
-    GTEST_SKIP();
-  }
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
   testMpiTaskParallel.pre_processing();
   testMpiTaskParallel.run();
   testMpiTaskParallel.post_processing();
@@ -61,6 +64,10 @@ TEST(bessonov_e_star_topology_mpi, DataTransmissionTest) {
 
 TEST(bessonov_e_star_topology_mpi, LargeDataTest) {
   boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
   const int data_size = 100000;
@@ -86,11 +93,7 @@ TEST(bessonov_e_star_topology_mpi, LargeDataTest) {
   }
 
   bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
-
-  bool is_valid = testMpiTaskParallel.validation();
-  if (!is_valid) {
-    GTEST_SKIP();
-  }
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
   testMpiTaskParallel.pre_processing();
   testMpiTaskParallel.run();
   testMpiTaskParallel.post_processing();
@@ -114,6 +117,10 @@ TEST(bessonov_e_star_topology_mpi, LargeDataTest) {
 
 TEST(bessonov_e_star_topology_mpi, RandomDataTest) {
   boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
   const int data_size = 100;
@@ -145,11 +152,7 @@ TEST(bessonov_e_star_topology_mpi, RandomDataTest) {
   }
 
   bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
-
-  bool is_valid = testMpiTaskParallel.validation();
-  if (!is_valid) {
-    GTEST_SKIP();
-  }
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
   testMpiTaskParallel.pre_processing();
   testMpiTaskParallel.run();
   testMpiTaskParallel.post_processing();
@@ -157,6 +160,324 @@ TEST(bessonov_e_star_topology_mpi, RandomDataTest) {
   if (world.rank() == 0) {
     for (int i = 0; i < data_size; ++i) {
       ASSERT_EQ(output_data[i], input_data[i]);
+    }
+
+    std::vector<int> expected_traversal;
+    expected_traversal.push_back(0);
+    for (int i = 1; i < world.size(); ++i) {
+      expected_traversal.push_back(i);
+      expected_traversal.push_back(0);
+    }
+    for (int i = 0; i < traversal_size; ++i) {
+      ASSERT_EQ(traversal_order[i], expected_traversal[i]);
+    }
+  }
+}
+
+TEST(bessonov_e_star_topology_mpi, DataTest_2_power_10) {
+  boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+
+  const int data_size = 1024;
+  std::vector<int> input_data(data_size, 1);
+
+  int traversal_size = 2 * (world.size() - 1) + 1;
+
+  std::vector<int> output_data;
+  std::vector<int> traversal_order;
+
+  if (world.rank() == 0) {
+    output_data.resize(data_size);
+    traversal_order.resize(traversal_size);
+
+    taskDataPar->inputs.push_back(reinterpret_cast<uint8_t*>(input_data.data()));
+    taskDataPar->inputs_count.push_back(data_size);
+
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(output_data.data()));
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(traversal_order.data()));
+
+    taskDataPar->outputs_count.push_back(data_size);
+    taskDataPar->outputs_count.push_back(traversal_size);
+  }
+
+  bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
+  testMpiTaskParallel.pre_processing();
+  testMpiTaskParallel.run();
+  testMpiTaskParallel.post_processing();
+
+  if (world.rank() == 0) {
+    for (int i = 0; i < data_size; ++i) {
+      ASSERT_EQ(output_data[i], 1);
+    }
+
+    std::vector<int> expected_traversal;
+    expected_traversal.push_back(0);
+    for (int i = 1; i < world.size(); ++i) {
+      expected_traversal.push_back(i);
+      expected_traversal.push_back(0);
+    }
+    for (int i = 0; i < traversal_size; ++i) {
+      ASSERT_EQ(traversal_order[i], expected_traversal[i]);
+    }
+  }
+}
+
+TEST(bessonov_e_star_topology_mpi, DataTest_2_power_13) {
+  boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+
+  const int data_size = 8192;
+  std::vector<int> input_data(data_size, 1);
+
+  int traversal_size = 2 * (world.size() - 1) + 1;
+
+  std::vector<int> output_data;
+  std::vector<int> traversal_order;
+
+  if (world.rank() == 0) {
+    output_data.resize(data_size);
+    traversal_order.resize(traversal_size);
+
+    taskDataPar->inputs.push_back(reinterpret_cast<uint8_t*>(input_data.data()));
+    taskDataPar->inputs_count.push_back(data_size);
+
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(output_data.data()));
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(traversal_order.data()));
+
+    taskDataPar->outputs_count.push_back(data_size);
+    taskDataPar->outputs_count.push_back(traversal_size);
+  }
+
+  bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
+  testMpiTaskParallel.pre_processing();
+  testMpiTaskParallel.run();
+  testMpiTaskParallel.post_processing();
+
+  if (world.rank() == 0) {
+    for (int i = 0; i < data_size; ++i) {
+      ASSERT_EQ(output_data[i], 1);
+    }
+
+    std::vector<int> expected_traversal;
+    expected_traversal.push_back(0);
+    for (int i = 1; i < world.size(); ++i) {
+      expected_traversal.push_back(i);
+      expected_traversal.push_back(0);
+    }
+    for (int i = 0; i < traversal_size; ++i) {
+      ASSERT_EQ(traversal_order[i], expected_traversal[i]);
+    }
+  }
+}
+
+TEST(bessonov_e_star_topology_mpi, DataTest_3_power_8) {
+  boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+
+  const int data_size = 6561;
+  std::vector<int> input_data(data_size, 1);
+
+  int traversal_size = 2 * (world.size() - 1) + 1;
+
+  std::vector<int> output_data;
+  std::vector<int> traversal_order;
+
+  if (world.rank() == 0) {
+    output_data.resize(data_size);
+    traversal_order.resize(traversal_size);
+
+    taskDataPar->inputs.push_back(reinterpret_cast<uint8_t*>(input_data.data()));
+    taskDataPar->inputs_count.push_back(data_size);
+
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(output_data.data()));
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(traversal_order.data()));
+
+    taskDataPar->outputs_count.push_back(data_size);
+    taskDataPar->outputs_count.push_back(traversal_size);
+  }
+
+  bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
+  testMpiTaskParallel.pre_processing();
+  testMpiTaskParallel.run();
+  testMpiTaskParallel.post_processing();
+
+  if (world.rank() == 0) {
+    for (int i = 0; i < data_size; ++i) {
+      ASSERT_EQ(output_data[i], 1);
+    }
+
+    std::vector<int> expected_traversal;
+    expected_traversal.push_back(0);
+    for (int i = 1; i < world.size(); ++i) {
+      expected_traversal.push_back(i);
+      expected_traversal.push_back(0);
+    }
+    for (int i = 0; i < traversal_size; ++i) {
+      ASSERT_EQ(traversal_order[i], expected_traversal[i]);
+    }
+  }
+}
+
+TEST(bessonov_e_star_topology_mpi, DataTest_3_power_10) {
+  boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+
+  const int data_size = 59049;
+  std::vector<int> input_data(data_size, 1);
+
+  int traversal_size = 2 * (world.size() - 1) + 1;
+
+  std::vector<int> output_data;
+  std::vector<int> traversal_order;
+
+  if (world.rank() == 0) {
+    output_data.resize(data_size);
+    traversal_order.resize(traversal_size);
+
+    taskDataPar->inputs.push_back(reinterpret_cast<uint8_t*>(input_data.data()));
+    taskDataPar->inputs_count.push_back(data_size);
+
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(output_data.data()));
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(traversal_order.data()));
+
+    taskDataPar->outputs_count.push_back(data_size);
+    taskDataPar->outputs_count.push_back(traversal_size);
+  }
+
+  bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
+  testMpiTaskParallel.pre_processing();
+  testMpiTaskParallel.run();
+  testMpiTaskParallel.post_processing();
+
+  if (world.rank() == 0) {
+    for (int i = 0; i < data_size; ++i) {
+      ASSERT_EQ(output_data[i], 1);
+    }
+
+    std::vector<int> expected_traversal;
+    expected_traversal.push_back(0);
+    for (int i = 1; i < world.size(); ++i) {
+      expected_traversal.push_back(i);
+      expected_traversal.push_back(0);
+    }
+    for (int i = 0; i < traversal_size; ++i) {
+      ASSERT_EQ(traversal_order[i], expected_traversal[i]);
+    }
+  }
+}
+
+TEST(bessonov_e_star_topology_mpi, DataTest_prime_values_2003) {
+  boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+
+  const int data_size = 2003;
+  std::vector<int> input_data(data_size, 1);
+
+  int traversal_size = 2 * (world.size() - 1) + 1;
+
+  std::vector<int> output_data;
+  std::vector<int> traversal_order;
+
+  if (world.rank() == 0) {
+    output_data.resize(data_size);
+    traversal_order.resize(traversal_size);
+
+    taskDataPar->inputs.push_back(reinterpret_cast<uint8_t*>(input_data.data()));
+    taskDataPar->inputs_count.push_back(data_size);
+
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(output_data.data()));
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(traversal_order.data()));
+
+    taskDataPar->outputs_count.push_back(data_size);
+    taskDataPar->outputs_count.push_back(traversal_size);
+  }
+
+  bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
+  testMpiTaskParallel.pre_processing();
+  testMpiTaskParallel.run();
+  testMpiTaskParallel.post_processing();
+
+  if (world.rank() == 0) {
+    for (int i = 0; i < data_size; ++i) {
+      ASSERT_EQ(output_data[i], 1);
+    }
+
+    std::vector<int> expected_traversal;
+    expected_traversal.push_back(0);
+    for (int i = 1; i < world.size(); ++i) {
+      expected_traversal.push_back(i);
+      expected_traversal.push_back(0);
+    }
+    for (int i = 0; i < traversal_size; ++i) {
+      ASSERT_EQ(traversal_order[i], expected_traversal[i]);
+    }
+  }
+}
+
+TEST(bessonov_e_star_topology_mpi, DataTest_prime_values_4993) {
+  boost::mpi::communicator world;
+  if (world.size() < 2) {
+    ASSERT_TRUE(true);
+    return;
+  }
+  std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
+
+  const int data_size = 4993;
+  std::vector<int> input_data(data_size, 1);
+
+  int traversal_size = 2 * (world.size() - 1) + 1;
+
+  std::vector<int> output_data;
+  std::vector<int> traversal_order;
+
+  if (world.rank() == 0) {
+    output_data.resize(data_size);
+    traversal_order.resize(traversal_size);
+
+    taskDataPar->inputs.push_back(reinterpret_cast<uint8_t*>(input_data.data()));
+    taskDataPar->inputs_count.push_back(data_size);
+
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(output_data.data()));
+    taskDataPar->outputs.push_back(reinterpret_cast<uint8_t*>(traversal_order.data()));
+
+    taskDataPar->outputs_count.push_back(data_size);
+    taskDataPar->outputs_count.push_back(traversal_size);
+  }
+
+  bessonov_e_star_topology_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
+  ASSERT_EQ(testMpiTaskParallel.validation(), true);
+  testMpiTaskParallel.pre_processing();
+  testMpiTaskParallel.run();
+  testMpiTaskParallel.post_processing();
+
+  if (world.rank() == 0) {
+    for (int i = 0; i < data_size; ++i) {
+      ASSERT_EQ(output_data[i], 1);
     }
 
     std::vector<int> expected_traversal;
