@@ -11,8 +11,7 @@ TEST(bessonov_e_star_topology_mpi, DataTransmissionTest) {
   boost::mpi::communicator world;
 
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
 
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -65,8 +64,7 @@ TEST(bessonov_e_star_topology_mpi, DataTransmissionTest) {
 TEST(bessonov_e_star_topology_mpi, LargeDataTest) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -118,8 +116,7 @@ TEST(bessonov_e_star_topology_mpi, LargeDataTest) {
 TEST(bessonov_e_star_topology_mpi, RandomDataTest) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -177,8 +174,7 @@ TEST(bessonov_e_star_topology_mpi, RandomDataTest) {
 TEST(bessonov_e_star_topology_mpi, DataTest_2_power_10) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -230,8 +226,7 @@ TEST(bessonov_e_star_topology_mpi, DataTest_2_power_10) {
 TEST(bessonov_e_star_topology_mpi, DataTest_2_power_13) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -283,8 +278,7 @@ TEST(bessonov_e_star_topology_mpi, DataTest_2_power_13) {
 TEST(bessonov_e_star_topology_mpi, DataTest_3_power_8) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -336,8 +330,7 @@ TEST(bessonov_e_star_topology_mpi, DataTest_3_power_8) {
 TEST(bessonov_e_star_topology_mpi, DataTest_3_power_10) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -389,8 +382,7 @@ TEST(bessonov_e_star_topology_mpi, DataTest_3_power_10) {
 TEST(bessonov_e_star_topology_mpi, DataTest_prime_values_2003) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
@@ -442,8 +434,7 @@ TEST(bessonov_e_star_topology_mpi, DataTest_prime_values_2003) {
 TEST(bessonov_e_star_topology_mpi, DataTest_prime_values_4993) {
   boost::mpi::communicator world;
   if (world.size() < 2) {
-    ASSERT_TRUE(true);
-    return;
+    GTEST_SKIP();
   }
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
 
