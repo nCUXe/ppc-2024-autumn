@@ -20,6 +20,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, test_pipeline_run) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(global_result.data()));
   }
   auto testMpiTaskParallel = std::make_shared<bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel>(taskDataPar);
+  testMpiTaskParallel->exampl_func = [](double x) { return std::sin(x) * std::cos(x); };
 
   ASSERT_EQ(testMpiTaskParallel->validation(), true);
   testMpiTaskParallel->pre_processing();
@@ -41,6 +42,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, test_pipeline_run) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&num_points));
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(reference_result.data()));
     bessonov_e_integration_monte_carlo_mpi::TestMPITaskSequential testMpiTaskSequential(taskDataSeq);
+    testMpiTaskSequential.exampl_func = [](double x) { return std::sin(x) * std::cos(x); };
 
     ASSERT_EQ(testMpiTaskSequential.validation(), true);
     testMpiTaskSequential.pre_processing();
@@ -64,6 +66,8 @@ TEST(bessonov_e_integration_monte_carlo_mpi, test_task_run) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(global_result.data()));
   }
   auto testMpiTaskParallel = std::make_shared<bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel>(taskDataPar);
+  testMpiTaskParallel->exampl_func = [](double x) { return std::sin(x) * std::cos(x); };
+
   ASSERT_EQ(testMpiTaskParallel->validation(), true);
   testMpiTaskParallel->pre_processing();
   testMpiTaskParallel->run();
