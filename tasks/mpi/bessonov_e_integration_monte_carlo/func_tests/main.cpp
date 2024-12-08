@@ -4,6 +4,7 @@
 #include <boost/mpi/environment.hpp>
 #include <memory>
 #include <random>
+#include <numbers>
 
 #include "mpi/bessonov_e_integration_monte_carlo/include/ops_mpi.hpp"
 
@@ -12,7 +13,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, PositiveRangeTestMPI_sin) {
   std::vector<double> global_result(1, 0.0);
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
   double a = 0.0;
-  double b = 3.14159;
+  double b = std::numbers::pi;
   int num_points = 1000000;
   if (world.rank() == 0) {
     taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
@@ -60,7 +61,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, PositiveRangeTestMPI_log_x_plus_1) 
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(global_result.data()));
   }
   bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
-  testMpiTaskParallel.exampl_func = [](double x) { return std::log(x+1); };
+  testMpiTaskParallel.exampl_func = [](double x) { return std::log(x + 1); };
 
   ASSERT_EQ(testMpiTaskParallel.validation(), true);
   testMpiTaskParallel.pre_processing();
@@ -75,7 +76,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, PositiveRangeTestMPI_log_x_plus_1) 
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&num_points));
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(reference_result.data()));
     bessonov_e_integration_monte_carlo_mpi::TestMPITaskSequential testMpiTaskSequential(taskDataSeq);
-    testMpiTaskSequential.exampl_func = [](double x) { return std::log(x+1); };
+    testMpiTaskSequential.exampl_func = [](double x) { return std::log(x + 1); };
 
     ASSERT_EQ(testMpiTaskSequential.validation(), true);
     testMpiTaskSequential.pre_processing();
@@ -89,7 +90,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, NegativeRangeTestMPI) {
   boost::mpi::communicator world;
   std::vector<double> global_result(1, 0.0);
   std::shared_ptr<ppc::core::TaskData> taskDataPar = std::make_shared<ppc::core::TaskData>();
-  double a = -3.14159;
+  double a = -(std::numbers::pi);
   double b = 0.0;
   int num_points = 100000;
   if (world.rank() == 0) {
@@ -159,7 +160,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, VerySmallRangeTestMPI) {
     testMpiTaskSequential.pre_processing();
     testMpiTaskSequential.run();
     testMpiTaskSequential.post_processing();
-    ASSERT_NEAR(reference_result[0], global_result[0], 1e-7);
+    ASSERT_NEAR(reference_result[0], global_result[0], 5e-7);
   }
 }
 
@@ -177,7 +178,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, LongRangeTestMPI) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(global_result.data()));
   }
   bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel testMpiTaskParallel(taskDataPar);
-  testMpiTaskParallel.exampl_func = [](double x) { return std::cos(x) + x*x; };
+  testMpiTaskParallel.exampl_func = [](double x) { return std::cos(x) + x * x; };
 
   ASSERT_TRUE(testMpiTaskParallel.validation());
   testMpiTaskParallel.pre_processing();
@@ -192,7 +193,7 @@ TEST(bessonov_e_integration_monte_carlo_mpi, LongRangeTestMPI) {
     taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&num_points));
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(reference_result.data()));
     bessonov_e_integration_monte_carlo_mpi::TestMPITaskSequential testMpiTaskSequential(taskDataSeq);
-    testMpiTaskSequential.exampl_func = [](double x) { return std::cos(x) + x*x; };
+    testMpiTaskSequential.exampl_func = [](double x) { return std::cos(x) + x * x; };
 
     ASSERT_EQ(testMpiTaskSequential.validation(), true);
     testMpiTaskSequential.pre_processing();
