@@ -6,7 +6,6 @@
 #include <numbers>
 #include <random>
 
-
 #include "mpi/bessonov_e_integration_monte_carlo/include/ops_mpi.hpp"
 
 TEST(bessonov_e_integration_monte_carlo_mpi, PositiveRangeTestMPI_sin) {
