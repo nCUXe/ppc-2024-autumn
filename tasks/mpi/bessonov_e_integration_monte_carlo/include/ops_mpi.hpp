@@ -23,7 +23,7 @@ class TestMPITaskSequential : public ppc::core::Task {
   bool post_processing() override;
   double a, b;
   int num_points;
-  static double exampl_func(double x) { return x * x * x; }
+  std::function<double(double)> exampl_func;
 
  private:
   double res{};
@@ -38,7 +38,7 @@ class TestMPITaskParallel : public ppc::core::Task {
   bool post_processing() override;
   double a, b;
   int num_points;
-  static double exampl_func(double x) { return x * x * x; }
+  std::function<double(double)> exampl_func;
 
  private:
   double res;
