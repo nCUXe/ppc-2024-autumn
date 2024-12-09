@@ -19,7 +19,6 @@ TEST(bessonov_e_integration_monte_carlo_seq, PositiveRangeTest) {
   bessonov_e_integration_monte_carlo_seq::TestTaskSequential task(taskData);
   task.exampl_func = [](double x) { return std::sin(x); };
 
-
   ASSERT_TRUE(task.validation());
   task.pre_processing();
   task.run();
