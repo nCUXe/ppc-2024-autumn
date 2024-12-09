@@ -16,6 +16,7 @@ TEST(bessonov_e_integration_monte_carlo_seq, TestPipelineRun) {
   double output = 1.0;
   taskData->outputs.push_back(reinterpret_cast<uint8_t *>(&output));
   auto testTaskSequential = std::make_shared<bessonov_e_integration_monte_carlo_seq::TestTaskSequential>(taskData);
+  testTaskSequential->exampl_func = [](double x) { return std::sin(x); };
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
   perfAttr->num_running = 10;
   const auto t0 = std::chrono::high_resolution_clock::now();
@@ -43,6 +44,7 @@ TEST(bessonov_e_integration_monte_carlo_seq, TestTaskRun) {
   double output = 1.0;
   taskData->outputs.push_back(reinterpret_cast<uint8_t *>(&output));
   auto testTaskSequential = std::make_shared<bessonov_e_integration_monte_carlo_seq::TestTaskSequential>(taskData);
+  testTaskSequential->exampl_func = [](double x) { return std::sin(x); };
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
   perfAttr->num_running = 10;
   const auto t0 = std::chrono::high_resolution_clock::now();
