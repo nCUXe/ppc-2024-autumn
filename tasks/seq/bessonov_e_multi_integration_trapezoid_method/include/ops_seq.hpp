@@ -1,13 +1,12 @@
+// Copyright 2023 Nesterov Alexander
 #pragma once
 
-#include <functional>
-#include <random>
 #include <string>
 #include <vector>
 
 #include "core/task/include/task.hpp"
 
-namespace bessonov_e_integration_monte_carlo_seq {
+namespace nesterov_a_test_task_seq {
 
 class TestTaskSequential : public ppc::core::Task {
  public:
@@ -16,12 +15,9 @@ class TestTaskSequential : public ppc::core::Task {
   bool validation() override;
   bool run() override;
   bool post_processing() override;
-  double a, b;
-  int num_points;
-  std::function<double(double)> exampl_func;
 
  private:
-  double res{};
+  int input_{}, res{};
 };
 
-}  // namespace bessonov_e_integration_monte_carlo_seq
+}  // namespace nesterov_a_test_task_seq
