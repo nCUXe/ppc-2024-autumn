@@ -331,3 +331,80 @@ TEST(bessonov_e_integration_monte_carlo_mpi, RandomTestMPI) {
     ASSERT_NEAR(reference_result[0], global_result[0], 3e1);
   }
 }
+
+TEST(bessonov_e_integration_monte_carlo_mpi, TestMpi_InputLess3) {
+  std::shared_ptr<ppc::core::TaskData> taskDataMPIParallel = std::make_shared<ppc::core::TaskData>();
+  boost::mpi::communicator world;
+  if (world.rank() == 0) {
+    double a = -1.0;
+    double b = 1.0;
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
+    double result = 0.0;
+    taskDataMPIParallel->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
+
+    bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel testTaskMPIParallel(taskDataMPIParallel);
+    ASSERT_EQ(testTaskMPIParallel.validation(), false);
+  }
+}
+
+TEST(bessonov_e_integration_monte_carlo_mpi, TestMpi_InputMore3) {
+  std::shared_ptr<ppc::core::TaskData> taskDataMPIParallel = std::make_shared<ppc::core::TaskData>();
+  boost::mpi::communicator world;
+  if (world.rank() == 0) {
+    double a = -1.0;
+    double b = 1.0;
+    int num_points = 1000;
+    double extra_input = 5.0;
+
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&num_points));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&extra_input));
+
+    double result = 0.0;
+    taskDataMPIParallel->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
+
+    bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel testTaskMPIParallel(taskDataMPIParallel);
+    ASSERT_EQ(testTaskMPIParallel.validation(), false);
+  }
+}
+
+TEST(bessonov_e_integration_monte_carlo_mpi, TestMpi_OutputLess1) {
+  std::shared_ptr<ppc::core::TaskData> taskDataMPIParallel = std::make_shared<ppc::core::TaskData>();
+  boost::mpi::communicator world;
+  if (world.rank() == 0) {
+    double a = -1.0;
+    double b = 1.0;
+    int num_points = 1000;
+
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&num_points));
+
+    bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel testTaskMPIParallel(taskDataMPIParallel);
+    ASSERT_EQ(testTaskMPIParallel.validation(), false);
+  }
+}
+
+TEST(bessonov_e_integration_monte_carlo_mpi, TestMpi_OutputMore1) {
+  std::shared_ptr<ppc::core::TaskData> taskDataMPIParallel = std::make_shared<ppc::core::TaskData>();
+  boost::mpi::communicator world;
+  if (world.rank() == 0) {
+    double a = -1.0;
+    double b = 1.0;
+    int num_points = 1000;
+
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&a));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&b));
+    taskDataMPIParallel->inputs.emplace_back(reinterpret_cast<uint8_t*>(&num_points));
+
+    double result1 = 0.0;
+    double result2 = 0.0;
+    taskDataMPIParallel->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result1));
+    taskDataMPIParallel->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result2));
+
+    bessonov_e_integration_monte_carlo_mpi::TestMPITaskParallel testTaskMPIParallel(taskDataMPIParallel);
+    ASSERT_EQ(testTaskMPIParallel.validation(), false);
+  }
+}
