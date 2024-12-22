@@ -7,7 +7,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::vali
   }
 
   auto* dim_ptr = reinterpret_cast<size_t*>(taskData->inputs[0]);
-  if (!dim_ptr || *dim_ptr == 0) {
+  if (dim_ptr == nullptr || *dim_ptr == 0) {
     return false;
   }
 
@@ -15,7 +15,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::vali
   auto* upper_data = reinterpret_cast<double*>(taskData->inputs[2]);
   auto* steps_data = reinterpret_cast<int*>(taskData->inputs[3]);
 
-  if (!lower_data || !upper_data || !steps_data) {
+  if (lower_data == nullptr || upper_data == nullptr || steps_data == nullptr) {
     return false;
   }
 
