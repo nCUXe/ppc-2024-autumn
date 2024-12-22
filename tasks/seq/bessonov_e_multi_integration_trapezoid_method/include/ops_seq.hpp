@@ -9,13 +9,13 @@
 #include <utility>
 #include <vector>
 
-
 #include "core/task/include/task.hpp"
 
 namespace bessonov_e_multi_integration_trapezoid_method_seq {
 
 class TestTaskSequential : public ppc::core::Task {
- public:TestTaskSequential(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
+ public:
+  TestTaskSequential(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
   bool pre_processing() override;
   bool validation() override;
   bool run() override;

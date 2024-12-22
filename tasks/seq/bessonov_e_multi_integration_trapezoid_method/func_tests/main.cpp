@@ -297,7 +297,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ValidationTestInvalidCou
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
   std::vector<double> upper_limits = {1.0};
-  std::vector<int> steps = {10, 10};  
+  std::vector<int> steps = {10, 10};
   double result = 0.0;
 
   auto taskData = std::make_shared<ppc::core::TaskData>();
@@ -314,4 +314,3 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ValidationTestInvalidCou
 
   ASSERT_FALSE(task.validation());
 }
-
