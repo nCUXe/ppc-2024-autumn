@@ -45,7 +45,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TestPipelineRun) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  double expected_result = 1.0;  // Replace with appropriate calculated expected result.
+  double expected_result = 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -91,6 +91,6 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TestTaskRun) {
 
   ppc::core::Perf::print_perf_statistic(perfResults);
 
-  double expected_result = 1.0;  // Replace with appropriate calculated expected result.
+  double expected_result = 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }

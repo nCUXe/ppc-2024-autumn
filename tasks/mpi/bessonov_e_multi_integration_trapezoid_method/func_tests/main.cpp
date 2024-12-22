@@ -336,7 +336,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestInvalidSte
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
   std::vector<double> upper_limits = {1.0, 1.0};
-  std::vector<int> steps = {10, -1};  // Invalid: negative steps
+  std::vector<int> steps = {10, -1};
   double result = 0.0;
 
   auto taskData = std::make_shared<ppc::core::TaskData>();
@@ -362,7 +362,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestInvalidCou
   boost::mpi::communicator world;
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
-  std::vector<double> upper_limits = {1.0};  // Invalid: mismatched size
+  std::vector<double> upper_limits = {1.0};
   std::vector<int> steps = {10, 10};
   double result = 0.0;
 
@@ -392,7 +392,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestExtraOutpu
   std::vector<double> upper_limits = {1.0, 1.0};
   std::vector<int> steps = {10, 10};
   double result1 = 0.0;
-  double result2 = 0.0;  // Invalid: extra output
+  double result2 = 0.0;
 
   auto taskData = std::make_shared<ppc::core::TaskData>();
   if (world.rank() == 0) {

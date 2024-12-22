@@ -27,7 +27,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, SingleDimensionalSinInte
   task.run();
   task.post_processing();
 
-  double expected_result = 1.0 - std::cos(1.0);  // Integral of sin(x) from 0 to 1
+  double expected_result = 1.0 - std::cos(1.0);
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -56,7 +56,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, OneDimensionalExpFunctio
   ASSERT_TRUE(task.run());
   ASSERT_TRUE(task.post_processing());
 
-  double expected_result = std::exp(1.0) - 1.0;  // Integral of exp(x) from 0 to 1
+  double expected_result = std::exp(1.0) - 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -114,7 +114,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TwoDimensionalCosFunctio
   ASSERT_TRUE(task.run());
   ASSERT_TRUE(task.post_processing());
 
-  double expected_result = 1.0;  // Integral of cos(x)*cos(y) over [0, pi/2]x[0, pi/2]
+  double expected_result = 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -143,7 +143,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ThreeDimensionalLinearFu
   ASSERT_TRUE(task.run());
   ASSERT_TRUE(task.post_processing());
 
-  double expected_result = 1.5;  // Integral of x+y+z over [0,1]x[0,1]x[0,1]
+  double expected_result = 1.5;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -172,7 +172,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ThreeDimensionalIntegrat
   ASSERT_TRUE(task.run());
   ASSERT_TRUE(task.post_processing());
 
-  double expected_result = 0.125;  // Integral of x*y*z over [0,1]x[0,1]x[0,1]
+  double expected_result = 0.125;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -201,12 +201,12 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, FourDimensionalFunction)
   ASSERT_TRUE(task.run());
   ASSERT_TRUE(task.post_processing());
 
-  double expected_result = 0.5;  // Integral of x*y + z*w over [0,1]^4
+  double expected_result = 0.5;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
 TEST(bessonov_e_multi_integration_trapezoid_method_seq, ValidationTestInvalidDimension) {
-  size_t dim = 0;  // Invalid dimension
+  size_t dim = 0;
   std::vector<double> lower_limits = {0.0};
   std::vector<double> upper_limits = {1.0};
   std::vector<int> steps = {10};
@@ -275,7 +275,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ValidationTestInvalidSte
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
   std::vector<double> upper_limits = {1.0, 1.0};
-  std::vector<int> steps = {10, -1};  // Invalid: negative steps
+  std::vector<int> steps = {10, -1};
   double result = 0.0;
 
   auto taskData = std::make_shared<ppc::core::TaskData>();
@@ -296,7 +296,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ValidationTestInvalidSte
 TEST(bessonov_e_multi_integration_trapezoid_method_seq, ValidationTestInvalidCount) {
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
-  std::vector<double> upper_limits = {1.0};// Invalid: count
+  std::vector<double> upper_limits = {1.0};
   std::vector<int> steps = {10, 10};  
   double result = 0.0;
 

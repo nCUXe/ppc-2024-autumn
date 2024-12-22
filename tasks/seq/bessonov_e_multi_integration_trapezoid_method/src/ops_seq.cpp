@@ -3,23 +3,19 @@
 bool bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential::validation() {
   internal_order_test();
 
-  // Check input size
   if (taskData->inputs.size() < 3) {
     return false;
   }
 
-  // Check output size
   if (taskData->outputs.size() != 1) {
     return false;
   }
 
-  // Check dimension
   size_t* dim_ptr = reinterpret_cast<size_t*>(taskData->inputs[0]);
   if (!dim_ptr || *dim_ptr == 0) {
     return false;
   }
 
-  // Check lower and upper bounds
   double* lower_data = reinterpret_cast<double*>(taskData->inputs[1]);
   double* upper_data = reinterpret_cast<double*>(taskData->inputs[2]);
   int* steps_data = reinterpret_cast<int*>(taskData->inputs[3]);
@@ -28,7 +24,6 @@ bool bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential::vali
     return false;
   }
 
-  // Check that sizes of lower_bounds, upper_bounds, and steps match dimension
   if (taskData->inputs_count.size() < 3 || taskData->inputs_count[0] != *dim_ptr ||
       taskData->inputs_count[1] != *dim_ptr || taskData->inputs_count[2] != *dim_ptr) {
     return false;
@@ -84,7 +79,7 @@ bool bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential::run(
       temp /= (num_steps[j] + 1);
 
       if (point[j] == lower_bounds[j] || point[j] == upper_bounds[j]) {
-        weight *= 0.5;  // ”чет граничных точек
+        weight *= 0.5;
       }
     }
 
@@ -92,7 +87,6 @@ bool bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential::run(
     result += f_value * weight;
   }
 
-  // ”чет объема €чеек
   result *= std::accumulate(step_sizes.begin(), step_sizes.end(), 1.0, std::multiplies<>());
 
   return true;

@@ -7,10 +7,10 @@
 #include <boost/serialization/vector.hpp>
 #include <functional>
 #include <memory>
+#include <numbers>
 #include <numeric>
 #include <utility>
 #include <vector>
-#include <numbers>
 
 #include "core/task/include/task.hpp"
 
