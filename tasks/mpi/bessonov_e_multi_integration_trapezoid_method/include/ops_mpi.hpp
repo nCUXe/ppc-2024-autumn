@@ -13,7 +13,6 @@
 #include <utility>
 #include <vector>
 
-
 #include "core/task/include/task.hpp"
 
 namespace bessonov_e_multi_integration_trapezoid_method_mpi {
