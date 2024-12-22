@@ -134,9 +134,14 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::run() 
   internal_order_test();
 
   boost::mpi::broadcast(world, dim, 0);
-  boost::mpi::broadcast(world, lower_bounds, 0);
-  boost::mpi::broadcast(world, upper_bounds, 0);
-  boost::mpi::broadcast(world, num_steps, 0);
+
+  lower_bounds.resize(dim);
+  upper_bounds.resize(dim);
+  num_steps.resize(dim);
+
+  boost::mpi::broadcast(world, lower_bounds.data(), dim, 0);
+  boost::mpi::broadcast(world, upper_bounds.data(), dim, 0);
+  boost::mpi::broadcast(world, num_steps.data(), dim, 0);
 
   std::vector<double> step_sizes(dim);
   for (size_t i = 0; i < dim; ++i) {

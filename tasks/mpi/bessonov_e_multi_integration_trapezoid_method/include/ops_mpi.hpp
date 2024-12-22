@@ -4,8 +4,6 @@
 
 #include <boost/mpi/collectives.hpp>
 #include <boost/mpi/communicator.hpp>
-#include <boost/serialization/utility.hpp>
-#include <boost/serialization/vector.hpp>
 #include <cmath>
 #include <functional>
 #include <memory>
