@@ -2,6 +2,14 @@
 
 #include "seq/bessonov_e_multi_integration_trapezoid_method/include/ops_seq.hpp"
 
+double integrand_1(const std::vector<double>& point) { return std::sin(point[0]); }
+double integrand_2(const std::vector<double>& point) { return std::exp(point[0]); }
+double integrand_3(const std::vector<double>& point) { return point[0] + point[1]; }
+double integrand_4(const std::vector<double>& point) { return std::cos(point[0]) * std::cos(point[1]); }
+double integrand_5(const std::vector<double>& point) { return point[0] + point[1] + point[2]; }
+double integrand_6(const std::vector<double>& point) { return point[0] * point[1] * point[2]; }
+double integrand_7(const std::vector<double>& point) { return point[0] * point[1] + point[2] * point[3]; }
+
 TEST(bessonov_e_multi_integration_trapezoid_method_seq, SingleDimensionalSinIntegration) {
   size_t dim = 1;
   std::vector<double> lower_limits = {0.0};
@@ -20,7 +28,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, SingleDimensionalSinInte
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return std::sin(point[0]); };
+  task.integrand = integrand_1;
 
   ASSERT_TRUE(task.validation());
   task.pre_processing();
@@ -49,12 +57,12 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, OneDimensionalExpFunctio
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return std::exp(point[0]); };
+  task.integrand = integrand_2;
 
   ASSERT_TRUE(task.validation());
-  ASSERT_TRUE(task.pre_processing());
-  ASSERT_TRUE(task.run());
-  ASSERT_TRUE(task.post_processing());
+  task.pre_processing();
+  task.run();
+  task.post_processing();
 
   double expected_result = std::exp(1.0) - 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
@@ -78,12 +86,12 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TwoDimensionalIntegratio
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return point[0] + point[1]; };
+  task.integrand = integrand_3;
 
   ASSERT_TRUE(task.validation());
-  ASSERT_TRUE(task.pre_processing());
-  ASSERT_TRUE(task.run());
-  ASSERT_TRUE(task.post_processing());
+  task.pre_processing();
+  task.run();
+  task.post_processing();
 
   double expected_result = 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
@@ -107,12 +115,12 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TwoDimensionalCosFunctio
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return std::cos(point[0]) * std::cos(point[1]); };
+  task.integrand = integrand_4;
 
   ASSERT_TRUE(task.validation());
-  ASSERT_TRUE(task.pre_processing());
-  ASSERT_TRUE(task.run());
-  ASSERT_TRUE(task.post_processing());
+  task.pre_processing();
+  task.run();
+  task.post_processing();
 
   double expected_result = 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
@@ -136,12 +144,12 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ThreeDimensionalLinearFu
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
+  task.integrand = integrand_5;
 
   ASSERT_TRUE(task.validation());
-  ASSERT_TRUE(task.pre_processing());
-  ASSERT_TRUE(task.run());
-  ASSERT_TRUE(task.post_processing());
+  task.pre_processing();
+  task.run();
+  task.post_processing();
 
   double expected_result = 1.5;
   ASSERT_NEAR(result, expected_result, 1e-2);
@@ -165,7 +173,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, ThreeDimensionalIntegrat
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return point[0] * point[1] * point[2]; };
+  task.integrand = integrand_6;
 
   ASSERT_TRUE(task.validation());
   ASSERT_TRUE(task.pre_processing());
@@ -194,7 +202,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, FourDimensionalFunction)
   taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
 
   bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential task(taskData);
-  task.integrand = [](const std::vector<double>& point) { return point[0] * point[1] + point[2] * point[3]; };
+  task.integrand = integrand_7;
 
   ASSERT_TRUE(task.validation());
   ASSERT_TRUE(task.pre_processing());
