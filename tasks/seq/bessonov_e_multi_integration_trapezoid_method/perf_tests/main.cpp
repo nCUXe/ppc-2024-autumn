@@ -3,7 +3,7 @@
 #include "core/perf/include/perf.hpp"
 #include "seq/bessonov_e_multi_integration_trapezoid_method/include/ops_seq.hpp"
 
-double integral(const std::vector<double>& point) { return std::cos(point[0]) * std::sin(point[1]); }
+double integral(const std::vector<double>& point) { return cos(point[0]) * sin(point[1]); }
 
 TEST(bessonov_e_multi_integration_trapezoid_method_seq, TestPipelineRun) {
   size_t dim = 2;

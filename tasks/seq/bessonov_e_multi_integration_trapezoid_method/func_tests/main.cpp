@@ -2,10 +2,10 @@
 
 #include "seq/bessonov_e_multi_integration_trapezoid_method/include/ops_seq.hpp"
 
-double integrand_1(const std::vector<double>& point) { return std::sin(point[0]); }
-double integrand_2(const std::vector<double>& point) { return std::exp(point[0]); }
+double integrand_1(const std::vector<double>& point) { return sin(point[0]); }
+double integrand_2(const std::vector<double>& point) { return exp(point[0]); }
 double integrand_3(const std::vector<double>& point) { return point[0] + point[1]; }
-double integrand_4(const std::vector<double>& point) { return std::cos(point[0]) * std::cos(point[1]); }
+double integrand_4(const std::vector<double>& point) { return cos(point[0]) * cos(point[1]); }
 double integrand_5(const std::vector<double>& point) { return point[0] + point[1] + point[2]; }
 double integrand_6(const std::vector<double>& point) { return point[0] * point[1] * point[2]; }
 double integrand_7(const std::vector<double>& point) { return point[0] * point[1] + point[2] * point[3]; }
