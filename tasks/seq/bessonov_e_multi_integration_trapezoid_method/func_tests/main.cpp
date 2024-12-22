@@ -35,7 +35,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, SingleDimensionalSinInte
   task.run();
   task.post_processing();
 
-  double expected_result = 1.0 - std::cos(1.0);
+  double expected_result = 1.0 - cos(1.0);
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
@@ -64,7 +64,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, OneDimensionalExpFunctio
   task.run();
   task.post_processing();
 
-  double expected_result = std::exp(1.0) - 1.0;
+  double expected_result = exp(1.0) - 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 

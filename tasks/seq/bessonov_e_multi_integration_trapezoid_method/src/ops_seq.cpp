@@ -11,14 +11,14 @@ bool bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential::vali
     return false;
   }
 
-  size_t* dim_ptr = reinterpret_cast<size_t*>(taskData->inputs[0]);
+  auto* dim_ptr = reinterpret_cast<size_t*>(taskData->inputs[0]);
   if (!dim_ptr || *dim_ptr == 0) {
     return false;
   }
 
-  double* lower_data = reinterpret_cast<double*>(taskData->inputs[1]);
-  double* upper_data = reinterpret_cast<double*>(taskData->inputs[2]);
-  int* steps_data = reinterpret_cast<int*>(taskData->inputs[3]);
+  auto* lower_data = reinterpret_cast<double*>(taskData->inputs[1]);
+  auto* upper_data = reinterpret_cast<double*>(taskData->inputs[2]);
+  auto* steps_data = reinterpret_cast<int*>(taskData->inputs[3]);
 
   if (!lower_data || !upper_data || !steps_data) {
     return false;
