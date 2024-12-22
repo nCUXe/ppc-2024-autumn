@@ -10,7 +10,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TwoDimensional) {
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
   std::vector<double> upper_limits = {1.0, 1.0};
-  std::vector<int> steps = {10, 10};
+  std::vector<int> steps = {50, 50};
   double parallel_result = 0.0;
 
   auto taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -62,7 +62,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ThreeDimensional) {
   size_t dim = 3;
   std::vector<double> lower_limits = {0.0, 0.0, 0.0};
   std::vector<double> upper_limits = {1.0, 1.0, 1.0};
-  std::vector<int> steps = {10, 10, 10};
+  std::vector<int> steps = {50, 50, 50};
   double parallel_result = 0.0;
 
   auto taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -226,7 +226,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, FourDimensionalComplexFu
   size_t dim = 4;
   std::vector<double> lower_limits = {-1.0, 0.0, -1.0, 0.0};
   std::vector<double> upper_limits = {1.0, 1.0, 1.0, 2.0};
-  std::vector<int> steps = {20, 20, 20, 20};
+  std::vector<int> steps = {50, 50, 50, 50};
   double parallel_result = 0.0;
 
   auto taskDataPar = std::make_shared<ppc::core::TaskData>();
@@ -277,12 +277,81 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, FourDimensionalComplexFu
   }
 }
 
+TEST(bessonov_e_multi_integration_trapezoid_method_mpi, RandomIntervalThreeDimensionalWithEqualCheck) {
+  boost::mpi::communicator world;
+  size_t dim = 3;
+  std::vector<double> lower_limits(dim);
+  std::vector<double> upper_limits(dim);
+  std::vector<int> steps = {50, 50, 50};
+  double parallel_result = 0.0;
+
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0.0, 10.0);
+
+  for (size_t i = 0; i < dim; ++i) {
+      lower_limits[i] = dis(gen);
+      upper_limits[i] = dis(gen);
+
+      if (std::abs(lower_limits[i] - upper_limits[i]) < 1e-6) {
+      upper_limits[i] += 1.0;
+      }
+
+      if (lower_limits[i] > upper_limits[i]) {
+      std::swap(lower_limits[i], upper_limits[i]);
+      }
+  }
+
+  auto taskDataPar = std::make_shared<ppc::core::TaskData>();
+  if (world.rank() == 0) {
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&dim));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(lower_limits.data()));
+    taskDataPar->inputs_count.emplace_back(lower_limits.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(upper_limits.data()));
+    taskDataPar->inputs_count.emplace_back(upper_limits.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(steps.data()));
+    taskDataPar->inputs_count.emplace_back(steps.size());
+    taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
+  }
+
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  parallelTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
+
+  ASSERT_TRUE(parallelTask.validation());
+  parallelTask.pre_processing();
+  parallelTask.run();
+  parallelTask.post_processing();
+
+  if (world.rank() == 0) {
+    double sequential_result = 0.0;
+    auto taskDataSeq = std::make_shared<ppc::core::TaskData>();
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&dim));
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(lower_limits.data()));
+    taskDataSeq->inputs_count.emplace_back(lower_limits.size());
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(upper_limits.data()));
+    taskDataSeq->inputs_count.emplace_back(upper_limits.size());
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(steps.data()));
+    taskDataSeq->inputs_count.emplace_back(steps.size());
+    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
+
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    sequentialTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
+
+    ASSERT_TRUE(sequentialTask.validation());
+    ASSERT_TRUE(sequentialTask.pre_processing());
+    ASSERT_TRUE(sequentialTask.run());
+    ASSERT_TRUE(sequentialTask.post_processing());
+
+    ASSERT_NEAR(parallel_result, sequential_result, 1e-2);
+  }
+}
+
 TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestInvalidBounds) {
   boost::mpi::communicator world;
   size_t dim = 2;
   std::vector<double> lower_limits = {1.0, 0.0};
   std::vector<double> upper_limits = {0.0, 1.0};
-  std::vector<int> steps = {10, 10};
+  std::vector<int> steps = {50, 50};
   double result = 0.0;
 
   auto taskData = std::make_shared<ppc::core::TaskData>();
@@ -309,7 +378,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestValidData)
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
   std::vector<double> upper_limits = {1.0, 1.0};
-  std::vector<int> steps = {10, 10};
+  std::vector<int> steps = {50, 50};
   double result = 0.0;
 
   auto taskData = std::make_shared<ppc::core::TaskData>();
