@@ -64,7 +64,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, OneDimensionalExpFunctio
   task.run();
   task.post_processing();
 
-  double expected_result = exp(1.0) - 1.0;
+  double expected_result = std::numbers::e - 1.0;
   ASSERT_NEAR(result, expected_result, 1e-2);
 }
 
