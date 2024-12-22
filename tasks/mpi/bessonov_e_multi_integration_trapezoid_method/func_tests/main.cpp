@@ -290,16 +290,16 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, RandomIntervalThreeDimen
   std::uniform_real_distribution<> dis(0.0, 10.0);
 
   for (size_t i = 0; i < dim; ++i) {
-      lower_limits[i] = dis(gen);
-      upper_limits[i] = dis(gen);
+    lower_limits[i] = dis(gen);
+    upper_limits[i] = dis(gen);
 
-      if (std::abs(lower_limits[i] - upper_limits[i]) < 1e-6) {
+    if (std::abs(lower_limits[i] - upper_limits[i]) < 1e-6) {
       upper_limits[i] += 1.0;
-      }
+    }
 
-      if (lower_limits[i] > upper_limits[i]) {
+    if (lower_limits[i] > upper_limits[i]) {
       std::swap(lower_limits[i], upper_limits[i]);
-      }
+    }
   }
 
   auto taskDataPar = std::make_shared<ppc::core::TaskData>();
