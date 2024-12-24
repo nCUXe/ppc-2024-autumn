@@ -1,5 +1,34 @@
 #include "mpi/bessonov_e_multi_integration_trapezoid_method/include/ops_mpi.hpp"
 
+std::vector<double> bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::precompute_weights(
+    size_t dimensions) {
+  size_t combinations = static_cast<size_t>(1) << dimensions;  // 2^dimensions
+  std::vector<double> weights(combinations);
+
+  for (size_t mask = 0; mask < combinations; ++mask) {
+    double weight = 1.0;
+    for (size_t i = 0; i < dimensions; ++i) {
+      if (mask & (static_cast<size_t>(1) << i)) {
+        weight *= 0.5;
+      }
+    }
+    weights[mask] = weight;
+  }
+
+  return weights;
+}
+
+double bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::compute_weight_for_point(
+    const std::vector<double>& point) {
+  size_t mask = 0;
+  for (size_t i = 0; i < dim; ++i) {
+    if (point[i] == lower_bounds[i] || point[i] == upper_bounds[i]) {
+      mask |= (static_cast<size_t>(1) << i);
+    }
+  }
+  return cached_weights[mask];
+}
+
 bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::validation() {
   internal_order_test();
   if (taskData->inputs.size() < 3 || taskData->outputs.size() != 1) {
@@ -38,6 +67,8 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::p
                       reinterpret_cast<double*>(taskData->inputs[2]) + dim);
   num_steps.assign(reinterpret_cast<int*>(taskData->inputs[3]), reinterpret_cast<int*>(taskData->inputs[3]) + dim);
 
+  cached_weights = precompute_weights(dim);
+
   return true;
 }
 
@@ -59,17 +90,13 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::r
 
   for (size_t i = 0; i < total_points; ++i) {
     size_t temp = i;
-    double weight = 1.0;
 
     for (size_t j = 0; j < dim; ++j) {
       point[j] = lower_bounds[j] + (temp % (num_steps[j] + 1)) * step_sizes[j];
       temp /= (num_steps[j] + 1);
-
-      if (point[j] == lower_bounds[j] || point[j] == upper_bounds[j]) {
-        weight *= 0.5;
-      }
     }
 
+    double weight = compute_weight_for_point(point);
     result += integrand(point) * weight;
   }
 
@@ -82,6 +109,35 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::p
   internal_order_test();
   reinterpret_cast<double*>(taskData->outputs[0])[0] = result;
   return true;
+}
+
+std::vector<double> bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::precompute_weights(
+    size_t dimensions) {
+  size_t combinations = static_cast<size_t>(1) << dimensions;  // 2^dimensions
+  std::vector<double> weights(combinations);
+
+  for (size_t mask = 0; mask < combinations; ++mask) {
+    double weight = 1.0;
+    for (size_t i = 0; i < dimensions; ++i) {
+      if (mask & (static_cast<size_t>(1) << i)) {
+        weight *= 0.5;
+      }
+    }
+    weights[mask] = weight;
+  }
+
+  return weights;
+}
+
+double bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::compute_weight_for_point(
+    const std::vector<double>& point) {
+  size_t mask = 0;
+  for (size_t i = 0; i < dim; ++i) {
+    if (point[i] == lower_bounds[i] || point[i] == upper_bounds[i]) {
+      mask |= (static_cast<size_t>(1) << i);
+    }
+  }
+  return cached_weights[mask];
 }
 
 bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::validation() {
