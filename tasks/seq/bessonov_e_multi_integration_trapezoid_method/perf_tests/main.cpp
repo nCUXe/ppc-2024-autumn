@@ -3,8 +3,6 @@
 #include "core/perf/include/perf.hpp"
 #include "seq/bessonov_e_multi_integration_trapezoid_method/include/ops_seq.hpp"
 
-double integral(const std::vector<double>& point) { return cos(point[0]) * sin(point[1]); }
-
 TEST(bessonov_e_multi_integration_trapezoid_method_seq, TestPipelineRun) {
   size_t dim = 2;
   std::vector<double> lower_limits = {0.0, 0.0};
@@ -24,7 +22,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TestPipelineRun) {
 
   auto testTaskSequential =
       std::make_shared<bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential>(taskData);
-  testTaskSequential->integrand = integral;
+  testTaskSequential->integrand = [](const std::vector<double>& point) { return cos(point[0]) * sin(point[1]); };
 
   ASSERT_TRUE(testTaskSequential->validation());
   testTaskSequential->pre_processing();
@@ -68,7 +66,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_seq, TestTaskRun) {
 
   auto testTaskSequential =
       std::make_shared<bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential>(taskData);
-  testTaskSequential->integrand = integral;
+  testTaskSequential->integrand = [](const std::vector<double>& point) { return cos(point[0]) * sin(point[1]); };
 
   ASSERT_TRUE(testTaskSequential->validation());
   testTaskSequential->pre_processing();

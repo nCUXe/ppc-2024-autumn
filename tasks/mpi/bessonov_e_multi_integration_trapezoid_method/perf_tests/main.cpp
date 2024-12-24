@@ -24,7 +24,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TestPipelineRun) {
   }
 
   auto testTaskParallel =
-      std::make_shared<bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel>(taskData);
+      std::make_shared<bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel>(taskData);
   testTaskParallel->integrand = [](const std::vector<double>& point) {
     return std::cos(point[0]) * std::sin(point[1]);
   };
@@ -74,7 +74,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TestTaskRun) {
   }
 
   auto testTaskParallel =
-      std::make_shared<bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel>(taskData);
+      std::make_shared<bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel>(taskData);
   testTaskParallel->integrand = [](const std::vector<double>& point) {
     return std::cos(point[0]) * std::sin(point[1]);
   };

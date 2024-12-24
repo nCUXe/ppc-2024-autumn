@@ -83,8 +83,7 @@ bool bessonov_e_multi_integration_trapezoid_method_seq::TestTaskSequential::run(
       }
     }
 
-    double f_value = integrand(point);
-    result += f_value * weight;
+    result += integrand(point) * weight;
   }
 
   result *= std::accumulate(step_sizes.begin(), step_sizes.end(), 1.0, std::multiplies<>());

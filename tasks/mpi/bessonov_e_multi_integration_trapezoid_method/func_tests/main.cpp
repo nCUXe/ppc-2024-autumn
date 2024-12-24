@@ -25,7 +25,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TwoDimensional) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
   parallelTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1]; };
 
   ASSERT_TRUE(parallelTask.validation());
@@ -45,7 +45,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TwoDimensional) {
     taskDataSeq->inputs_count.emplace_back(steps.size());
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
 
-    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
     sequentialTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1]; };
 
     ASSERT_TRUE(sequentialTask.validation());
@@ -77,7 +77,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ThreeDimensional) {
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
   parallelTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
 
   ASSERT_TRUE(parallelTask.validation());
@@ -97,7 +97,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ThreeDimensional) {
     taskDataSeq->inputs_count.emplace_back(steps.size());
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
 
-    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
     sequentialTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
 
     ASSERT_TRUE(sequentialTask.validation());
@@ -129,7 +129,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TwoDimensionalComplexFun
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
   parallelTask.integrand = [](const std::vector<double>& point) {
     return std::exp(-point[0] * point[0] - point[1] * point[1]);
   };
@@ -151,7 +151,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, TwoDimensionalComplexFun
     taskDataSeq->inputs_count.emplace_back(steps.size());
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
 
-    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
     sequentialTask.integrand = [](const std::vector<double>& point) {
       return std::exp(-point[0] * point[0] - point[1] * point[1]);
     };
@@ -185,7 +185,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ThreeDimensionalNonLinea
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
   parallelTask.integrand = [](const std::vector<double>& point) {
     return std::sin(point[0]) * std::cos(point[1]) * std::exp(-point[2]);
   };
@@ -207,7 +207,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ThreeDimensionalNonLinea
     taskDataSeq->inputs_count.emplace_back(steps.size());
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
 
-    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
     sequentialTask.integrand = [](const std::vector<double>& point) {
       return std::sin(point[0]) * std::cos(point[1]) * std::exp(-point[2]);
     };
@@ -241,7 +241,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, FourDimensionalComplexFu
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
   parallelTask.integrand = [](const std::vector<double>& point) {
     return std::sin(point[0]) * point[1] + std::cos(point[2]) * std::exp(-point[3]);
   };
@@ -263,9 +263,121 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, FourDimensionalComplexFu
     taskDataSeq->inputs_count.emplace_back(steps.size());
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
 
-    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
     sequentialTask.integrand = [](const std::vector<double>& point) {
       return std::sin(point[0]) * point[1] + std::cos(point[2]) * std::exp(-point[3]);
+    };
+
+    ASSERT_TRUE(sequentialTask.validation());
+    sequentialTask.pre_processing();
+    sequentialTask.run();
+    sequentialTask.post_processing();
+
+    ASSERT_NEAR(parallel_result, sequential_result, 1e-2);
+  }
+}
+
+TEST(bessonov_e_multi_integration_trapezoid_method_mpi, FiveDimensionalComplexFunction) {
+  boost::mpi::communicator world;
+  size_t dim = 5;
+  std::vector<double> lower_limits = {0.0, -2.0, -1.0, 0.0, 1.0};
+  std::vector<double> upper_limits = {1.0, 2.0, 1.0, 3.0, 4.0};
+  std::vector<int> steps = {20, 20, 20, 20, 20};
+  double parallel_result = 0.0;
+
+  auto taskDataPar = std::make_shared<ppc::core::TaskData>();
+  if (world.rank() == 0) {
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&dim));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(lower_limits.data()));
+    taskDataPar->inputs_count.emplace_back(lower_limits.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(upper_limits.data()));
+    taskDataPar->inputs_count.emplace_back(upper_limits.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(steps.data()));
+    taskDataPar->inputs_count.emplace_back(steps.size());
+    taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
+  }
+
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
+  parallelTask.integrand = [](const std::vector<double>& point) {
+    return std::sin(point[0] * point[1]) + std::cos(point[2] * point[3]) * std::exp(-point[4]);
+  };
+
+  ASSERT_TRUE(parallelTask.validation());
+  parallelTask.pre_processing();
+  parallelTask.run();
+  parallelTask.post_processing();
+
+  if (world.rank() == 0) {
+    double sequential_result = 0.0;
+    auto taskDataSeq = std::make_shared<ppc::core::TaskData>();
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&dim));
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(lower_limits.data()));
+    taskDataSeq->inputs_count.emplace_back(lower_limits.size());
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(upper_limits.data()));
+    taskDataSeq->inputs_count.emplace_back(upper_limits.size());
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(steps.data()));
+    taskDataSeq->inputs_count.emplace_back(steps.size());
+    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
+
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
+    sequentialTask.integrand = [](const std::vector<double>& point) {
+      return std::sin(point[0] * point[1]) + std::cos(point[2] * point[3]) * std::exp(-point[4]);
+    };
+
+    ASSERT_TRUE(sequentialTask.validation());
+    sequentialTask.pre_processing();
+    sequentialTask.run();
+    sequentialTask.post_processing();
+
+    ASSERT_NEAR(parallel_result, sequential_result, 1e-2);
+  }
+}
+
+TEST(bessonov_e_multi_integration_trapezoid_method_mpi, SixDimensionalComplexFunction) {
+  boost::mpi::communicator world;
+  size_t dim = 6;
+  std::vector<double> lower_limits = {-2.0, 0.0, -3.0, 1.0, -1.0, 0.0};
+  std::vector<double> upper_limits = {2.0, 1.0, 3.0, 4.0, 2.0, 1.0};
+  std::vector<int> steps = {10, 10, 10, 10, 10, 10};
+  double parallel_result = 0.0;
+
+  auto taskDataPar = std::make_shared<ppc::core::TaskData>();
+  if (world.rank() == 0) {
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(&dim));
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(lower_limits.data()));
+    taskDataPar->inputs_count.emplace_back(lower_limits.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(upper_limits.data()));
+    taskDataPar->inputs_count.emplace_back(upper_limits.size());
+    taskDataPar->inputs.emplace_back(reinterpret_cast<uint8_t*>(steps.data()));
+    taskDataPar->inputs_count.emplace_back(steps.size());
+    taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
+  }
+
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
+  parallelTask.integrand = [](const std::vector<double>& point) {
+    return point[0] * point[1] - point[2] * point[3] + std::sin(point[4] * point[5]);
+  };
+
+  ASSERT_TRUE(parallelTask.validation());
+  parallelTask.pre_processing();
+  parallelTask.run();
+  parallelTask.post_processing();
+
+  if (world.rank() == 0) {
+    double sequential_result = 0.0;
+    auto taskDataSeq = std::make_shared<ppc::core::TaskData>();
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(&dim));
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(lower_limits.data()));
+    taskDataSeq->inputs_count.emplace_back(lower_limits.size());
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(upper_limits.data()));
+    taskDataSeq->inputs_count.emplace_back(upper_limits.size());
+    taskDataSeq->inputs.emplace_back(reinterpret_cast<uint8_t*>(steps.data()));
+    taskDataSeq->inputs_count.emplace_back(steps.size());
+    taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
+
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
+    sequentialTask.integrand = [](const std::vector<double>& point) {
+      return point[0] * point[1] - point[2] * point[3] + std::sin(point[4] * point[5]);
     };
 
     ASSERT_TRUE(sequentialTask.validation());
@@ -314,7 +426,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, RandomIntervalThreeDimen
     taskDataPar->outputs.emplace_back(reinterpret_cast<uint8_t*>(&parallel_result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel parallelTask(taskDataPar);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel parallelTask(taskDataPar);
   parallelTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
 
   ASSERT_TRUE(parallelTask.validation());
@@ -334,7 +446,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, RandomIntervalThreeDimen
     taskDataSeq->inputs_count.emplace_back(steps.size());
     taskDataSeq->outputs.emplace_back(reinterpret_cast<uint8_t*>(&sequential_result));
 
-    bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential sequentialTask(taskDataSeq);
+    bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential sequentialTask(taskDataSeq);
     sequentialTask.integrand = [](const std::vector<double>& point) { return point[0] + point[1] + point[2]; };
 
     ASSERT_TRUE(sequentialTask.validation());
@@ -366,7 +478,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestInvalidBou
     taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel task(taskData);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel task(taskData);
 
   if (world.rank() == 0) {
     ASSERT_FALSE(task.validation());
@@ -393,7 +505,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestValidData)
     taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel task(taskData);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel task(taskData);
 
   if (world.rank() == 0) {
     ASSERT_TRUE(task.validation());
@@ -420,7 +532,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestInvalidSte
     taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel task(taskData);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel task(taskData);
 
   if (world.rank() == 0) {
     ASSERT_FALSE(task.validation());
@@ -447,7 +559,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestInvalidCou
     taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel task(taskData);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel task(taskData);
 
   if (world.rank() == 0) {
     ASSERT_FALSE(task.validation());
@@ -476,7 +588,7 @@ TEST(bessonov_e_multi_integration_trapezoid_method_mpi, ValidationTestExtraOutpu
     taskData->outputs.emplace_back(reinterpret_cast<uint8_t*>(&result2));
   }
 
-  bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel task(taskData);
+  bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel task(taskData);
 
   if (world.rank() == 0) {
     ASSERT_FALSE(task.validation());

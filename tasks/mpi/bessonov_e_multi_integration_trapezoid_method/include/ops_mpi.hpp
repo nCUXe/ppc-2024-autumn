@@ -17,9 +17,9 @@
 
 namespace bessonov_e_multi_integration_trapezoid_method_mpi {
 
-class TestTaskSequential : public ppc::core::Task {
+class TestMPITaskSequential : public ppc::core::Task {
  public:
-  explicit TestTaskSequential(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
+  explicit TestMPITaskSequential(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
   bool pre_processing() override;
   bool validation() override;
   bool run() override;
@@ -36,9 +36,9 @@ class TestTaskSequential : public ppc::core::Task {
   double result;
 };
 
-class TestTaskParallel : public ppc::core::Task {
+class TestMPITaskParallel : public ppc::core::Task {
  public:
-  explicit TestTaskParallel(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
+  explicit TestMPITaskParallel(std::shared_ptr<ppc::core::TaskData> taskData_) : Task(std::move(taskData_)) {}
   bool pre_processing() override;
   bool validation() override;
   bool run() override;

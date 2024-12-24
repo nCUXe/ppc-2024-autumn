@@ -1,6 +1,6 @@
 #include "mpi/bessonov_e_multi_integration_trapezoid_method/include/ops_mpi.hpp"
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::validation() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::validation() {
   internal_order_test();
   if (taskData->inputs.size() < 3 || taskData->outputs.size() != 1) {
     return false;
@@ -28,7 +28,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::vali
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::pre_processing() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::pre_processing() {
   internal_order_test();
 
   dim = *reinterpret_cast<size_t*>(taskData->inputs[0]);
@@ -41,7 +41,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::pre_
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::run() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::run() {
   internal_order_test();
 
   std::vector<double> step_sizes(dim);
@@ -78,13 +78,13 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::run(
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskSequential::post_processing() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskSequential::post_processing() {
   internal_order_test();
   reinterpret_cast<double*>(taskData->outputs[0])[0] = result;
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::validation() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::validation() {
   internal_order_test();
   if (world.rank() == 0) {
     if (taskData->inputs.size() < 3 || taskData->outputs.size() != 1) {
@@ -113,7 +113,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::valida
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::pre_processing() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::pre_processing() {
   internal_order_test();
 
   if (world.rank() == 0) {
@@ -130,7 +130,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::pre_pr
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::run() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::run() {
   internal_order_test();
 
   boost::mpi::broadcast(world, dim, 0);
@@ -185,7 +185,7 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::run() 
   return true;
 }
 
-bool bessonov_e_multi_integration_trapezoid_method_mpi::TestTaskParallel::post_processing() {
+bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::post_processing() {
   internal_order_test();
   if (world.rank() == 0) {
     reinterpret_cast<double*>(taskData->outputs[0])[0] = result;
