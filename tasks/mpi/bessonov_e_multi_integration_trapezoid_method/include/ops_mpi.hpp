@@ -36,7 +36,7 @@ class TestMPITaskSequential : public ppc::core::Task {
   double result;
   std::vector<double> cached_weights;
 
-  std::vector<double> precompute_weights(size_t dim);
+  static std::vector<double> precompute_weights(size_t dim);
   double compute_weight_for_point(const std::vector<double>& point);
 };
 
@@ -60,7 +60,7 @@ class TestMPITaskParallel : public ppc::core::Task {
   boost::mpi::communicator world;
   std::vector<double> cached_weights;
 
-  std::vector<double> precompute_weights(size_t dimensions);
+  static std::vector<double> precompute_weights(size_t dimensions);
   double compute_weight_for_point(const std::vector<double>& point);
 };
 

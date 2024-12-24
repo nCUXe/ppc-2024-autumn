@@ -199,6 +199,8 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::run
   boost::mpi::broadcast(world, upper_bounds.data(), dim, 0);
   boost::mpi::broadcast(world, num_steps.data(), dim, 0);
 
+  cached_weights = precompute_weights(dim);
+
   std::vector<double> step_sizes(dim);
   for (size_t i = 0; i < dim; ++i) {
     step_sizes[i] = (upper_bounds[i] - lower_bounds[i]) / num_steps[i];
@@ -218,17 +220,13 @@ bool bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITaskParallel::run
 
   for (size_t i = start; i < end; ++i) {
     size_t temp = i;
-    double weight = 1.0;
 
     for (size_t j = 0; j < dim; ++j) {
       point[j] = lower_bounds[j] + (temp % (num_steps[j] + 1)) * step_sizes[j];
       temp /= (num_steps[j] + 1);
-
-      if (point[j] == lower_bounds[j] || point[j] == upper_bounds[j]) {
-        weight *= 0.5;
-      }
     }
 
+    double weight = compute_weight_for_point(point);
     local_result += integrand(point) * weight;
   }
 
