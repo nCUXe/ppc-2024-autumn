@@ -31,6 +31,10 @@ class TestTaskSequential : public ppc::core::Task {
   std::vector<int> num_steps;
 
   double result;
+  std::vector<double> cached_weights;
+
+  std::vector<double> precompute_weights(size_t dim);
+  double compute_weight_for_point(const std::vector<double>& point);
 };
 
 }  // namespace bessonov_e_multi_integration_trapezoid_method_seq
