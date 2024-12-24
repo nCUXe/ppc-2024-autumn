@@ -8,7 +8,7 @@ std::vector<double> bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITa
   for (size_t mask = 0; mask < combinations; ++mask) {
     double weight = 1.0;
     for (size_t i = 0; i < dimensions; ++i) {
-      if (mask & (static_cast<size_t>(1) << i)) {
+      if ((mask & (static_cast<size_t>(1) << i)) != 0) {
         weight *= 0.5;
       }
     }
@@ -119,7 +119,7 @@ std::vector<double> bessonov_e_multi_integration_trapezoid_method_mpi::TestMPITa
   for (size_t mask = 0; mask < combinations; ++mask) {
     double weight = 1.0;
     for (size_t i = 0; i < dimensions; ++i) {
-      if (mask & (static_cast<size_t>(1) << i)) {
+      if ((mask & (static_cast<size_t>(1) << i)) != 0) {
         weight *= 0.5;
       }
     }
